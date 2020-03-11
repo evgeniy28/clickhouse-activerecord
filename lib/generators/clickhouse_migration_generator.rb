@@ -19,6 +19,15 @@ class ClickhouseMigrationGenerator < ActiveRecord::Generators::MigrationGenerato
     end
   end
 
+  def configured_migrate_path
+    return unless database = options[:database]
+    config = ActiveRecord::Base.configurations.configs_for(
+      env_name: Rails.env,
+      spec_name: database,
+    )
+    config&.migrations_paths
+  end
+
   def default_migrate_path
     "db/migrate_clickhouse"
   end
